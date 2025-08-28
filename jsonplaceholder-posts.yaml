@@ -1,0 +1,72 @@
+openapi: 3.0.3
+info:
+  title: JSONPlaceholder Posts API (POST example)
+  version: 1.0.0
+  description: >
+    Minimal OpenAPI spec for creating a post via JSONPlaceholder.
+    Mirrors the sample fetch() call provided.
+servers:
+  - url: https://jsonplaceholder.typicode.com
+paths:
+  /posts:
+    post:
+      summary: Create a post
+      description: Creates a post resource (JSONPlaceholder returns a mocked created object).
+      tags: [Posts]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostInput'
+            examples:
+              sample:
+                summary: Sample post
+                value:
+                  title: foo
+                  body: bar
+                  userId: 1
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+              examples:
+                created:
+                  summary: Example created response
+                  value:
+                    id: 101
+                    title: foo
+                    body: bar
+                    userId: 1
+        "400":
+          description: Bad Request
+        "500":
+          description: Server Error
+components:
+  schemas:
+    PostInput:
+      type: object
+      required: [title, body, userId]
+      properties:
+        title:
+          type: string
+          example: foo
+        body:
+          type: string
+          example: bar
+        userId:
+          type: integer
+          format: int32
+          example: 1
+    Post:
+      allOf:
+        - $ref: '#/components/schemas/PostInput'
+        - type: object
+          properties:
+            id:
+              type: integer
+              format: int32
+              example: 101
